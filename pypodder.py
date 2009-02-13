@@ -86,27 +86,25 @@ def download_files(file_uris):
         # if the current file URI exists in the log, this file has already been
         # downloaded, and is thus skipped
 
-        if uri in downloaded_podcasts:
-            print "skipping " + uri
-            continue
-        # if LIMIT_DOWNLOADS_PER_FEED is set, and we have downloaded more files
-        # from this feed than MAX_DOWNLOADS_PER_FEED, skip the rest of the
-        # files.
-        if LIMIT_DOWNLOADS_PER_FEED:
-            if downloaded_files >= MAX_DOWNLOADS_PER_FEED:
-                break
+        if uri not in downloaded_podcasts:
+            # if LIMIT_DOWNLOADS_PER_FEED is set, and we have downloaded more files
+            # from this feed than MAX_DOWNLOADS_PER_FEED, skip the rest of the
+            # files.
+            if LIMIT_DOWNLOADS_PER_FEED:
+                if downloaded_files >= MAX_DOWNLOADS_PER_FEED:
+                    break
 
-        # extract filename from the URI 
-        uri_split = re.split("/", uri)
-        filename = uri_split[len(uri_split) - 1]
-        
-        # download the file
-        if OUTPUT:
-            print "downloading " + uri
-#        urllib.urlretrieve(uri, DEST_DIR + os.sep + filename)
-#        log_file.write(uri + os.linesep)
+            # extract filename from the URI 
+            uri_split = re.split("/", uri)
+            filename = uri_split[len(uri_split) - 1]
+            
+            # download the file
+            if OUTPUT:
+                print "downloading " + uri
+            urllib.urlretrieve(uri, DEST_DIR + os.sep + filename)
+            log_file.write(uri + os.linesep)
 
-        downloaded_files += 1
+            downloaded_files += 1
 
 def parse_feed(uri):
     """Parses the XML from each feed, looking for tags that look like 
