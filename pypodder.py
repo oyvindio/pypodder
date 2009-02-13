@@ -6,11 +6,55 @@ import urllib2
 import urllib
 from xml.dom import minidom
 
+###############################################################################
+# pypodder - A (very) simple podcatcher.
+###############################################################################
+# Usage:
+#
+# Add the URIs of the podcast feeds you want to subscribe to to CONFIG_FILE, 
+# one per line. Then run this script to parse the feeds and download podcast 
+# media files.
+# 
+###############################################################################
+# Configuration
+###############################################################################
+#
+# The file from which to read feed URIs. URIs should be separated by a newline
+# character.
 CONFIG_FILE = "pypodder.conf"
+# The file in which a list of downloaded podcasts is maintained - to avoid
+# re-downloading files. This is simply a list of URIs to the files that have
+# already been downloaded, separated by newline characters.
+#
 LOG_FILE = "pypodder.log"
+#
+# The directory in which to save downloaded podcasts. Change this to your
+# preference.
 DEST_DIR = os.environ['HOME']  + os.sep + "tmp/"
+#
+# If set to True, the script prints some status output to stdout when running.
+OUTPUT = False
+# If LIMIT_DOWNLOADS_PER_FEED is set to True, a maximum of
+# MAX_DOWNLOADS_PER_FEED files will be downloaded per feed. To disable this
+# functionality, simply set it to False.
+# The rationale behind this functionality is to avoid downloading the entire
+# back catalogue of a podcast whose feed you have just added. Again, if this is
+# what you want, disable it.
 LIMIT_DOWNLOADS_PER_FEED = True
+#
+# The maximum number of files to download per feed if LIMIT_DOWNLOADS_PER_FEED
+# is set to True.
 MAX_DOWNLOADS_PER_FEED = 5
+#
+###############################################################################
+# Note:
+# This script was intended to be a quick reimplementation of Linc's excellent
+# bashpodder ( http://lincgeek.org/bashpodder/ ), only entirely in python, and
+# with a few modifications that I've added to bashpodder as I've been using it.
+#
+# Feel free to modify this script to suit your own needs.
+###############################################################################
+
 
 def strip_newlines(file):
     """Strips newline characters from the end of lines in a file. Returns a list
@@ -53,7 +97,8 @@ def download_files(file_uris):
         # download the file
         urllib.urlretrieve(uri, dest_dir + os.sep + filename)
         log_file.write(uri + os.linesep)
-        print "downloading " + uri
+        if OUTPUT:
+            print "downloading " + uri
 
         downloaded_files++
 
@@ -63,7 +108,8 @@ def parse_feed(uri):
     attribute, which in turn should contain URIs that should point to 
     podcast media files."""
 
-    print "parsing " + uri
+    if OUTPUT:
+        print "parsing " + uri
 
     feed = urllib2.urlopen(uri)
     xml = minidom.parse(feed)
