@@ -80,20 +80,18 @@ def download_files(file_uris):
     log_file = open(LOG_FILE, "r+")
     downloaded_podcasts = strip_newlines(log_file)
 
-    print downloaded_podcasts
     downloaded_files = 0
     for uri in file_uris:
-        # if the current file URI exists in the log, this file has already been
-        # downloaded, and is thus skipped
 
+        # if LIMIT_DOWNLOADS_PER_FEED is set, and we have downloaded more files
+        # from this feed than MAX_DOWNLOADS_PER_FEED, skip the rest of the
+        # files
+        if LIMIT_DOWNLOADS_PER_FEED:
+            if downloaded_files >= MAX_DOWNLOADS_PER_FEED:
+                break
+        # if the current file URI is not found in the log, it is a new file, and
+        # is thus downloaded
         if uri not in downloaded_podcasts:
-            # if LIMIT_DOWNLOADS_PER_FEED is set, and we have downloaded more files
-            # from this feed than MAX_DOWNLOADS_PER_FEED, skip the rest of the
-            # files.
-            if LIMIT_DOWNLOADS_PER_FEED:
-                if downloaded_files >= MAX_DOWNLOADS_PER_FEED:
-                    break
-
             # extract filename from the URI 
             uri_split = re.split("/", uri)
             filename = uri_split[len(uri_split) - 1]
