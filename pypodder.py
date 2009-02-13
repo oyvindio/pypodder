@@ -33,7 +33,8 @@ LOG_FILE = "pypodder.log"
 DEST_DIR = os.environ['HOME']  + os.sep + "tmp/"
 #
 # If set to True, the script prints some status output to stdout when running.
-OUTPUT = False
+# If set to False, output is omitted.
+OUTPUT = True
 # If LIMIT_DOWNLOADS_PER_FEED is set to True, a maximum of
 # MAX_DOWNLOADS_PER_FEED files will be downloaded per feed. To disable this
 # functionality, simply set it to False.
@@ -95,12 +96,12 @@ def download_files(file_uris):
         filename = uri_split[len(uri_split) - 1]
         
         # download the file
-        urllib.urlretrieve(uri, dest_dir + os.sep + filename)
-        log_file.write(uri + os.linesep)
         if OUTPUT:
             print "downloading " + uri
+        urllib.urlretrieve(uri, DEST_DIR + os.sep + filename)
+        log_file.write(uri + os.linesep)
 
-        downloaded_files++
+        downloaded_files += 1
 
 def parse_feed(uri):
     """Parses the XML from each feed, looking for tags that look like 
