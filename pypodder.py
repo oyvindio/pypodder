@@ -21,11 +21,13 @@ from xml.dom import minidom
 #
 # The file from which to read feed URIs. URIs should be separated by a newline
 # character.
+# NOTE: THIS FILE (OBVIOUSLY) NEEDS TO EXIST
 CONFIG_FILE = "pypodder.conf"
+#
 # The file in which a list of downloaded podcasts is maintained - to avoid
 # re-downloading files. This is simply a list of URIs to the files that have
 # already been downloaded, separated by newline characters.
-#
+# NOTE: THIS FILE (NOT AS OBVIOUSLY, BUT STILL) NEEDS TO EXIST
 LOG_FILE = "pypodder.log"
 #
 # The directory in which to save downloaded podcasts. Change this to your
@@ -78,6 +80,7 @@ def download_files(file_uris):
     log_file = open(LOG_FILE, "r+")
     downloaded_podcasts = strip_newlines(log_file)
 
+    print downloaded_podcasts
     downloaded_files = 0
     for uri in file_uris:
         # if the current file URI exists in the log, this file has already been
@@ -98,8 +101,8 @@ def download_files(file_uris):
         # download the file
         if OUTPUT:
             print "downloading " + uri
-        urllib.urlretrieve(uri, DEST_DIR + os.sep + filename)
-        log_file.write(uri + os.linesep)
+#        urllib.urlretrieve(uri, DEST_DIR + os.sep + filename)
+#        log_file.write(uri + os.linesep)
 
         downloaded_files += 1
 
