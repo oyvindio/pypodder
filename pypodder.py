@@ -102,7 +102,7 @@ def download_files(file_uris):
             urllib.urlretrieve(uri, DEST_DIR + os.sep + filename)
             log_file.write(uri + os.linesep)
 
-            downloaded_files += 1
+        downloaded_files += 1
 
 def parse_feed(uri):
     """Parses the XML from each feed, looking for tags that look like 
