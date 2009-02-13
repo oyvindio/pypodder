@@ -85,6 +85,8 @@ def download_files(file_uris):
     for uri in file_uris:
         # if the current file URI exists in the log, this file has already been
         # downloaded, and is thus skipped
+        print uri
+
         if uri in downloaded_podcasts:
             continue
         # if LIMIT_DOWNLOADS_PER_FEED is set, and we have downloaded more files
