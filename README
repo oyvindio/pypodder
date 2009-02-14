@@ -6,7 +6,6 @@ How to use pypodder:
 * Create a file named pypodder.conf in the same directory, and put the URIs of 
   the RSS feeds to the podcasts you want to subscribe to in this file - one per 
   line.
-* Create an empty file named pypodder.log in the same directory.
 
 Now you're set. Either run pypodder.py manually or add cronjob / scheduled task
 that runs it at whatever interval you desire.

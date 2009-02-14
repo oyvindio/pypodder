@@ -27,11 +27,12 @@ CONFIG_FILE = "pypodder.conf"
 # The file in which a list of downloaded podcasts is maintained - to avoid
 # re-downloading files. This is simply a list of URIs to the files that have
 # already been downloaded, separated by newline characters.
-# NOTE: THIS FILE (NOT AS OBVIOUSLY, BUT STILL) NEEDS TO EXIST
 LOG_FILE = "pypodder.log"
 #
 # The directory in which to save downloaded podcasts. Change this to your
 # preference.
+# os.environ['HOME']  + os.sep translates to your user home directory with a
+# trailing / or \\ (depending on the platform).
 DEST_DIR = os.environ['HOME']  + os.sep + "tmp/"
 #
 # If set to True, the script prints some status output to stdout when running.
@@ -77,8 +78,12 @@ def download_files(file_uris):
     """Downloads files stored at URIs contained in a list of strings passed as
     input to the function."""
 
-    log_file = open(LOG_FILE, "r+")
-    downloaded_podcasts = strip_newlines(log_file)
+    if os.path.exists(LOG_FILE):
+        log_file = open(LOG_FILE, "rU+")
+        downloaded_podcasts = strip_newlines(log_file)
+    else:
+        log_file = open(LOG_FILE,"w")
+        downloaded_podcasts = []
 
     downloaded_files = 0
     for uri in file_uris:
@@ -102,6 +107,7 @@ def download_files(file_uris):
             urllib.urlretrieve(uri, DEST_DIR + os.sep + filename)
             log_file.write(uri + os.linesep)
 
+        log_file.close()
         downloaded_files += 1
 
 def parse_feed(uri):
