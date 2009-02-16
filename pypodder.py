@@ -132,6 +132,9 @@ def parse_feed(uri):
 
     download_files(file_uris)
 
+# Make the script more cronjob friendly
+os.chdir(".")
+
 # Parse config file to get feed URIs
 feed_uris = strip_newlines(open(CONFIG_FILE, "rU"))
 
