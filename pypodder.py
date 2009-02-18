@@ -2,6 +2,7 @@
 
 import re
 import os
+import sys
 import urllib2
 import urllib
 from xml.dom import minidom
@@ -107,8 +108,9 @@ def download_files(file_uris):
             urllib.urlretrieve(uri, DEST_DIR + os.sep + filename)
             log_file.write(uri + os.linesep)
 
-        log_file.close()
         downloaded_files += 1
+
+    log_file.close()
 
 def parse_feed(uri):
     """Parses the XML from each feed, looking for tags that look like 
@@ -132,8 +134,9 @@ def parse_feed(uri):
 
     download_files(file_uris)
 
-# Make the script more cronjob friendly
-os.chdir(".")
+# Make the script more cronjob friendly by changing to the script directory
+# before looking for files in the current working directory (that won't work)
+os.chdir(sys.argv[0][:sys.argv[0].rfind("pypodder.py")])
 
 # Parse config file to get feed URIs
 feed_uris = strip_newlines(open(CONFIG_FILE, "rU"))
