@@ -39,18 +39,6 @@ DEST_DIR = os.environ['HOME']  + os.sep + "tmp/"
 # If set to True, the script prints some status output to stdout when running.
 # If set to False, output is omitted.
 OUTPUT = True
-# If LIMIT_DOWNLOADS_PER_FEED is set to True, a maximum of
-# MAX_DOWNLOADS_PER_FEED files will be downloaded per feed. To disable this
-# functionality, simply set it to False.
-# The rationale behind this functionality is to avoid downloading the entire
-# back catalogue of a podcast whose feed you have just added. Again, if this is
-# what you want, disable it.
-LIMIT_DOWNLOADS_PER_FEED = True
-#
-# The maximum number of files to download per feed if LIMIT_DOWNLOADS_PER_FEED
-# is set to True.
-MAX_DOWNLOADS_PER_FEED = 5
-#
 ###############################################################################
 # Note:
 # This script was intended to be a quick reimplementation of Linc's excellent
@@ -59,7 +47,6 @@ MAX_DOWNLOADS_PER_FEED = 5
 #
 # Feel free to modify this script to suit your own needs.
 ###############################################################################
-
 
 def strip_newlines(file):
     """Strips newline characters from the end of lines in a file. Returns a list
@@ -86,15 +73,7 @@ def download_files(file_uris):
         log_file = open(LOG_FILE,"w")
         downloaded_podcasts = []
 
-    downloaded_files = 0
     for uri in file_uris:
-
-        # if LIMIT_DOWNLOADS_PER_FEED is set, and we have downloaded more files
-        # from this feed than MAX_DOWNLOADS_PER_FEED, skip the rest of the
-        # files
-        if LIMIT_DOWNLOADS_PER_FEED:
-            if downloaded_files >= MAX_DOWNLOADS_PER_FEED:
-                break
         # if the current file URI is not found in the log, it is a new file, and
         # is thus downloaded
         if uri not in downloaded_podcasts:
@@ -107,8 +86,6 @@ def download_files(file_uris):
                 print "downloading " + uri
             urllib.urlretrieve(uri, DEST_DIR + os.sep + filename)
             log_file.write(uri + os.linesep)
-
-        downloaded_files += 1
 
     log_file.close()
 
